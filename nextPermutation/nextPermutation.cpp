@@ -12,6 +12,8 @@ void nextPermutation(vector<int>& nums) {
 		int turn1 = -1;
 		int turn2 = -1;
 
+		bool desended = true;
+
 		int last = nums[0];
 		turn1 = 0;
 
@@ -29,34 +31,55 @@ void nextPermutation(vector<int>& nums) {
 				turn1 = i;
 				ascend = i - 1;
 				last = nums[i];
+				desended = false;
 				i++;
 			}
 		}
 		if(ascend == 0 && desend == 0){
-		}else if(ascend == 0){
+			if(turn1 != 0){
+				nums[ascend] += nums[ascend+1];
+				nums[ascend+1] = nums[ascend] - nums[ascend+1];
+				nums[ascend] = nums[ascend] - nums[ascend+1];
+				sort(nums.begin() + ascend+1 , nums.end());
+			}
+
+		}else if(desended){
 			sort(nums.begin(), nums.end());
-		}
-		else if(desend < ascend){
-			nums[ascend] += nums[ascend+1];
-			nums[ascend+1] = nums[ascend] - nums[ascend+1];
-			nums[ascend] = nums[ascend] - nums[ascend+1];
+		}else if(desend > ascend){
+			int second_l = ascend+1;
+			int j = ascend+1;
+			for(; j<n; j++){
+				if(nums[j] > nums[ascend] && nums[j] < nums[second_l]){
+					second_l = j;
+				}
+			}
+
+			nums[ascend] += nums[second_l];
+			nums[second_l] = nums[ascend] - nums[second_l];
+			nums[ascend] = nums[ascend] - nums[second_l];
+			sort(nums.begin()+ascend+1, nums.end());
 		}
 		else{
 			nums[ascend] += nums[ascend+1];
 			nums[ascend+1] = nums[ascend] - nums[ascend+1];
 			nums[ascend] = nums[ascend] - nums[ascend+1];
-			sort(nums.begin() + ascend+1 , nums.end());
 		}
 	}
 }
 
 void main(){
 	vector<int> source;
-	int work = 1;
+	int work = 5;
 	source.push_back(work);
-	work = 1;
+	work = 4;
+	source.push_back(work);
+	work = 7;
 	source.push_back(work);
 	work = 5;
+	source.push_back(work);
+	work = 3;
+	source.push_back(work);
+	work = 2;
 	source.push_back(work);
 
 	nextPermutation(source);
